@@ -1,0 +1,9 @@
+module L7part3(key0,key3,sw,LEDR,HEX0,HEX1,HEX2);
+ 
+	input key0; //reset
+	input [7:0]sw;
+	
+	output LEDR; //LEDR0
+	output [0:6] HEX0,HEX1,HEX2;
+
+endmodule

@@ -1,0 +1,35 @@
+module L5part4 (Clk, D, Qa, Qb, Qc);
+
+  input Clk, D;
+  output Q;
+ 
+  latch D0 (Clk, D, Qa); 
+  latch D1 (Clk, D, Qb);
+  latch D2 (~Clk, D,Qc);
+  
+endmodule
+
+module latch (Clk, D, Q);
+
+   input Clk, D;
+   output Q;
+
+  wire S, R;
+
+  assign S = D;
+  assign R = ~D;
+
+  reg R_g, S_g, Qa, Qb /* synthesis keep */ ;
+
+  always @(posedge Clk) begin
+  
+  R_g = R;
+  S_g = S;
+  Qa = ~(R_g | Qb);
+  Qb = ~(S_g | Qa);
+
+  end
+  
+  assign Q = Qa;
+
+endmodule

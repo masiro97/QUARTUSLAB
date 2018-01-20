@@ -1,0 +1,61 @@
+module L7part4(clk,key0,sw,HEX0,HEX1);
+
+	input clk,key0,sw;
+	output [0:6]HEX0,HEX1;
+	
+	reg [25:0]cnt;
+	reg [6:0] second;
+	wire [3:0] s1,s0;
+	
+	initial second <=0;
+	
+	always @(posedge clk) begin
+		
+		cnt <= cnt + 1;
+		
+		if(key0 == 0) second <=0;
+		
+		if(cnt == 5000000) begin
+		
+			if(sw == 1) begin
+			 if(second == 99) second <= 99;
+			 else second <= second + 1;
+			end
+			
+			else begin
+				if (second == 0) second <=0;
+				else second <= second -1;
+			end
+			
+			cnt <= 0;
+			
+		end
+		
+	end	
+	
+	assign s0 = second % 10;
+	assign s1 = (second - s0) / 10;
+	
+	display_7seg d1(s1,HEX1);
+	display_7seg d0(s0,HEX0);
+	
+endmodule
+
+module display_7seg(sw,HEX);
+
+	input[3:0] sw;
+	output [0:6]HEX;
+	
+	assign HEX = (sw == 4'b0000) ? 7'b0000001: //0
+					 (sw == 4'b0001) ? 7'b1001111: //1
+					 (sw == 4'b0010) ? 7'b0010010: //2
+					 (sw == 4'b0011) ? 7'b0000110: //3
+					 (sw == 4'b0100) ? 7'b1001100: //4
+					 (sw == 4'b0101) ? 7'b0100100: //5
+					 (sw == 4'b0110) ? 7'b0100000: //6
+					 (sw == 4'b0111) ? 7'b0001101: //7
+					 (sw == 4'b1000) ? 7'b0000000: //8
+					 (sw == 4'b1001) ? 7'b0000100: //9
+											 7'b1111111;
+	
+endmodule

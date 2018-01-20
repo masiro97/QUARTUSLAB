@@ -1,0 +1,15 @@
+module L7part2(key0,key1,clk,sw,HEX2,HEX3,HEX4,HEX5,HEX6,HEX7);
+	input key0,key1,clk; //key0 : reset key1 : sw
+	input [15:0]sw;
+	output reg [0:6] HEX2,HEX3,HEX4,HEX5,HEX6,HEX7;
+	reg hour, minute, second;
+	//HEX7-6 : hour HEX5-4: minute HEX 3-2: second
+	initial begin
+	HEX2 <= 7'b0011111;
+	HEX3 <= 7'b0100100;
+	HEX4 <= 7'b0000001;
+	HEX5 <= 7'b0000001;
+	HEX6 <= 7'b0000001;
+	HEX7 <= 7'b0000001;
+	end
+endmodule

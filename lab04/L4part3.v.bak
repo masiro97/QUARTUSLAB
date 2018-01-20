@@ -1,0 +1,22 @@
+module L4part3(a,b,ci,s,co);
+	
+	//connecnt input LEDR output LEDG
+	input [3:0]a,b; // a ->sw 7-4 b-> sw 3-0
+	input ci; // ci -> sw 8
+	output [3:0]s;
+	output co;
+	
+	FA F1(a[0],b[0],ci,s[0],co);
+	FA F1(a[1],b[1],ci,s[1],co);
+	FA F1(a[2],b[2],ci,s[2],co);
+	FA F1(a[3],b[3],ci,s[3],co);
+endmodule
+
+module FA(a,b,ci,s,co);
+
+	input a,b,cin;
+	output s,cout;
+	
+	assign cout = (b & c) | (a & c) | (a & b);
+	assign s = a ^ b ^ cin;
+endmodule

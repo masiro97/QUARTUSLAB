@@ -1,0 +1,5 @@
+module(sw,HEX0,HEX1);
+	input[3:0] sw;
+	output [0:6] HEX0,HEX1;
+	
+endmodule

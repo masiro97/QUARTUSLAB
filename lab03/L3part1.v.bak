@@ -1,0 +1,14 @@
+module L3part1();
+	
+
+endmodule
+
+module display_7seg(sw,HEX);
+	input[3:0] sw;
+	output [0:6]HEX;
+	
+	
+
+
+
+endmodule

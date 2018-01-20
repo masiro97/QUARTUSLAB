@@ -1,0 +1,9 @@
+module muxx(s,x,m,y);
+
+   input [7:0]x;
+   input [7:0]y;
+   input s;
+   output [15:0]m;
+   assign m = (~s&x) |(s&y);
+
+endmodule

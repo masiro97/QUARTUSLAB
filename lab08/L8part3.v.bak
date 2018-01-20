@@ -1,0 +1,44 @@
+module L8part3(A,B,P,HEX6,HEX4,HEX1,HEX0,sw);
+	input [3:0]A,B;
+	input [16:0]sw;
+	output [7:0]P;
+	output [0:6] HEX0,HEX1,HEX4,HEX6;
+	
+	wire [6:0] pp1,pp2,pp3,pp4;
+	
+	assign A = sw[11:8];
+	assign B = sw[3:0];
+	assign onesP = P % 10;
+	assign tensP = (P - onesP) / 10;
+	
+	assign pp1[3:0] = B[0] & A;
+	assign pp2[4:1] = B[1] & A;
+	assign pp3[5:2] = B[2] & A;
+	assign pp4[6:3] = B[3] & A;
+	
+	display_7seg d6(A,HEX6);
+	display_7seg d4(B,HEX4);
+	display_7seg d1(tensP,HEX1);
+	display_7seg d0(onesP,HEX0);
+
+	
+endmodule
+
+module display_7seg(sw,HEX);
+
+	input[3:0] sw;
+	output [0:6]HEX;
+	
+	assign HEX = (sw == 4'b0000) ? 7'b0000001: //0
+					 (sw == 4'b0001) ? 7'b1001111: //1
+					 (sw == 4'b0010) ? 7'b0010010: //2
+					 (sw == 4'b0011) ? 7'b0000110: //3
+					 (sw == 4'b0100) ? 7'b1001100: //4
+					 (sw == 4'b0101) ? 7'b0100100: //5
+					 (sw == 4'b0110) ? 7'b0100000: //6
+					 (sw == 4'b0111) ? 7'b0001101: //7
+					 (sw == 4'b1000) ? 7'b0000000: //8
+					 (sw == 4'b1001) ? 7'b0000100: //9
+											 7'b1111111;
+	
+endmodule

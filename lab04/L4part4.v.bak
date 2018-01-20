@@ -1,0 +1,105 @@
+module L4part4(A,B,cin,S1,S0,HEX6,HEX4,HEX1.HEX0);
+
+	input [3:0]A,B;
+	input cin;
+	output [3:0]S1,S0;
+	output [0:6]HEX6, HEX4, HEX1, HEX0;
+	
+	wire c1,c2,c3,co;
+	wire za,zb;
+	wire [3:0]s;
+	wire [3:0] A,M; //A is m if z = 1
+	assign A[3] = 0; // when z = 1, A[3] is always 0
+	
+	comparator c(A, za); //A > 9: za=1 else: za=0
+	comparator c(B, zb); //B > 9: zb=1 else: zb=0
+	
+	FA F1(A[0],B[0],ci,s[0],c1);
+	FA F2(A[1],B[1],c1,s[1],c2);
+	FA F3(A[2],B[2],c2,s[2],c3);
+	FA F4(A[3],B[3],c3,s[3],co);
+	
+	comparator c (s, z); //determine z = 1 or z = 0
+	circuitA a (s[2:0],A[2:0]); //if z = 1, determine M( = A)
+	mux m (z,s,A,M); // if z = 1 : v = A, z = 0 : V = M
+	circuitB b(z,HEX1);// if z = 1 : HEX1 shows 1, z = 0 : HEX1 shows 0
+	display_7seg h0(M,HEX0); // HEX0 shows M
+	
+	display_7seg H0(A,HEX6);
+	display_7seg H1(B,HEX4);
+	display_7seg H2(S1,HEX1);
+	display_7seg H3(S0,HEX0);
+
+
+endmodule
+
+module display_7seg(sw,HEX);
+
+	input[3:0] sw;
+	output [0:6]HEX;
+	
+	assign HEX = (sw == 4'b0000) ? 7'b0000001: // showing 0
+					 (sw == 4'b0001) ? 7'b1001111: // showing 1
+					 (sw == 4'b0010) ? 7'b0010010: // showing 2
+					 (sw == 4'b0011) ? 7'b0000110: // showing 3
+					 (sw == 4'b0100) ? 7'b1001100: // showing 4
+					 (sw == 4'b0101) ? 7'b0100100: // showing 5
+					 (sw == 4'b0110) ? 7'b0100000: // showing 6
+					 (sw == 4'b0111) ? 7'b0001101: // showing 7
+					 (sw == 4'b1000) ? 7'b0000000: // showing 8
+					 (sw == 4'b1001) ? 7'b0000100: // showing 9
+											 7'b1111111;
+endmodule
+
+module FA(a,b,cin,s,cout);
+
+	input a,b,cin;
+	output s,cout;
+	
+	assign cout = (b & cin) | (a & cin) | (a & b);
+	assign s = a ^ b ^ cin;
+	
+endmodule
+
+module circuitA(V,A);
+
+	input [2:0] V;
+	output [2:0]A;
+	
+	assign A[0] = V[0];
+	assign A[1] = ~V[1];
+	assign A[2] = (V[1] & V[2]); 
+
+endmodule
+
+module comparator (V, z);
+
+  input [3:0]V;
+  output z;
+
+  assign z = (V[3] & (V[2] | V[1]));
+  
+endmodule
+
+module circuitB (z, HEX);
+
+  input z;
+  output [0:6] HEX;
+
+  assign HEX = (z == 1'b0) ? 7'b1111111:7'b1001111;
+  
+endmodule
+
+module mux(z,U,V,M);
+
+ input z;
+ input [3:0]U,V;
+ output [3:0]M;
+ 
+ assign M[0] = (z & V[0]) | (~z & U[0]);
+ assign M[1] = (z & V[1]) | (~z & U[1]);
+ assign M[2] = (z & V[2]) | (~z & U[2]);
+ assign M[3] = (z & V[3]) | (~z & U[3]);
+
+endmodule
+
